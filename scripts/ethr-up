@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# disable wirelss networking
+if [[ $(systemctl is-active systemd-networkd) = "active" ]]; then
+	systemctl stop systemd-networkd
+	systemctl stop firewalld-networkd
+fi
+
+# enable ethernet networking
+if [[ $(systemctl is-active systemd-networkd) = "inactive" ]]; then
+	systemctl start systemd-networkd
+	systemctl start firewalld
+else
+	systemctl stop iwd
+	systemctl stop firewalld
+fi
